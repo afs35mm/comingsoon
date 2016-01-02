@@ -1,3 +1,18 @@
-header.nav-head {
-    background: $color-black;
+.inner {
+    margin: 0 auto;
+    max-width: 980px;
 }
+
+.nav-head {
+    background: $color-black;
+
+    .logo {
+        width: 102px;
+        height: 65px;
+        display: block;
+        text-indent: -9999px;
+        background-image: url("/img/instalytics-logo.png");
+    }
+}
+
+

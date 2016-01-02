@@ -9,6 +9,10 @@ module.exports = function(app, config, ig) {
     app.get('/', function (req, res) {
         res.render('index');
     });
+
+    app.get('/profile', function (req, res) {
+        res.render('profile');
+    });
 }
 
 authorizeUser = function(req, res, config, ig) {
@@ -21,8 +25,8 @@ handleauth = function(req, res, config, ig) {
             console.log(err.body);
             res.send("Didn't work");
         } else {
-            console.log('Yay! Access token is ' + result.access_token);
-            res.send('You made it!!');
+            res.cookie('instaToken',result.access_token, { maxAge: 900000, httpOnly: true });
+            res.redirect('/profile');
         }
     });
 };
