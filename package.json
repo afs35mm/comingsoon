@@ -1,0 +1,29 @@
+{
+  "name": "instahistory",
+  "version": "1.0.0",
+  "description": "A timeline of your Instagram events",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "instagram",
+    "history",
+    "node"
+  ],
+  "author": "Andrew Schorr",
+  "license": "ISC",
+  "dependencies": {
+    "ect": "^0.5.9",
+    "express": "^4.13.3",
+    "http": "0.0.0",
+    "instagram-node": "^0.5.8"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^2.0.0",
+    "gulp-sass": "^2.1.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "jshint-stylish": "^2.1.0"
+  }
+}
