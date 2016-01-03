@@ -4,7 +4,20 @@ var igNode        = require('instagram-node');
 var hbs           = require('express-hbs');
 var cookieParser  = require('cookie-parser');
 var session       = require('express-session');
+var RedisStore    = require('connect-redis')(session);
+
 var config        = require('../../config');
+
+app.use(cookieParser());
+app.use(session({
+    store: new RedisStore({
+        host: 'localhost',
+        port: 6379,
+    }),
+    secret: config.redisSecret,
+    resave: false,
+    saveUninitialized: true
+}));
 
 app.engine('hbs', hbs.express4({
     partialsDir: __dirname + '/../views/partials',
@@ -16,7 +29,6 @@ app.set('view engine', 'hbs');
 app.set('views', __dirname + '/../views');
 
 app.use(express.static('public'));
-app.use(cookieParser());
 
 require('./routes')(app, config, igNode);
 

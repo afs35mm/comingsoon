@@ -9,6 +9,9 @@ var ig; // Shitty ass MFing work around https://github.com/totemstech/instagram-
 module.exports = function(app, config, igNode) {
 
     app.use(function(req, res, next){
+        if (!req.session) {
+            console.log('uh oh, no sessions');
+        }
         next();
     });
 
@@ -40,7 +43,7 @@ module.exports = function(app, config, igNode) {
     app.get('/home', authFuncs.verifyAuthedUser, function (req, res, next) {
         if (!ig) ig = authFuncs.getNewIgObject(config, igNode);
         ig.use({ access_token: req.cookies.igToken });
-        ig.user(crpytoFunc.decrypt(req.cookies.igUserId), function(err, result, remaining, limit) {
+        ig.user(req.session.igUserId, function(err, result, remaining, limit) {
             var clientData = {};
             if (err) {
                 clientData.errorMsg = 'aw man, something went haywire :('

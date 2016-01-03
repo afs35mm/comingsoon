@@ -24,7 +24,7 @@ exports.handleauth = function(req, res, config, ig) {
                 httpOnly: true
             };
             res.cookie('igToken', result.access_token, cookieOpts);
-            res.cookie('igUserId', crpytoFunc.encrypt(result.user.id), cookieOpts);
+            req.session.igUserId = result.user.id;
             res.redirect('/home');
         }
     });
