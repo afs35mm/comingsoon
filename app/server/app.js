@@ -1,29 +1,26 @@
 var express       = require('express');
 var app           = express();
 var ig            = require('instagram-node').instagram();
-var config        = require('../../config');
-var ECT           = require('ect');
-var bodyParser    = require('body-parser');
+var hbs           = require('express-hbs');
 var cookieParser  = require('cookie-parser');
+var session       = require('express-session');
+var config        = require('../../config');
 
 ig.use({
     client_id: config.clientId,
     client_secret: config.clientSecret
 });
 
-var ectRenderer = ECT({
-    watch: true,
-    root: __dirname + '/../views',
-    ext : '.ect'
-});
+app.engine('hbs', hbs.express4({
+    partialsDir: __dirname + '/../views/partials',
+    defaultLayout: __dirname + '/../views/layout/default',
+    layoutsDir: __dirname + '/../views/layout',
+}));
 
-app.set('view engine', 'ect');
+app.set('view engine', 'hbs');
 app.set('views', __dirname + '/../views');
 
-app.engine('ect', ectRenderer.render);
-
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 require('./routes')(app, config, ig);
