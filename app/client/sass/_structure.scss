@@ -1,33 +1,6 @@
-body {
-    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-    font-weight: 300;
-}
-
-* {
-    box-sizing: border-box;
-}
-
 .inner {
     margin: 0 auto;
     max-width: 980px;
-}
-
-.btn {
-    height: 34px;
-    padding: 8px 18px;
-    text-decoration: none;
-    background: $color-blue;
-    color: #fff;
-    font-size: 16px;
-    border-radius: $border-radius;
-}
-
-.error-msg {
-    background: $color-red;
-    color: #fff;
-    font-weight: 500;
-    padding: 8px 12px;
-    border-radius: $border-radius;
 }
 
 .nav-head {

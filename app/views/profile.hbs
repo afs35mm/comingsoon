@@ -3,5 +3,34 @@
     {{#if errorMsg}}
         <div class="error-msg">{{errorMsg}}</div>
     {{/if}}
+    {{#if userInfo}}
+
+        <table class="table">
+            <tr>
+                <th>Field</th>
+                <th>value</th>
+            </tr>
+            <tr>
+                <td>Username</td>
+                <td>{{userInfo.username}}</td>
+            </tr>
+            <tr>
+                <td>Bio</td>
+                <td>{{userInfo.bio}}</td>
+            </tr>
+            <tr>
+                <td>Profile Picture</td>
+                <td>{{userInfo.profile_picture}}</td>
+            </tr>
+            <tr>
+                <td>Full Name</td>
+                <td>{{userInfo.full_name}}</td>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>{{userInfo.id}}</td>
+            </tr>
+        </table>
+    {{/if}}
 </div>
 
