@@ -1,46 +1,7 @@
-var _ = require('lodash-node');
-/**
-* Authorization Funcs
-*/
-var verifyAuthedUser = function(req, res, next) {
-    if (req.cookies.igToken) {
-        next();
-    } else {
-        res.redirect('/');
-    }
-};
-
-var authorizeUser = function(req, res, config, ig) {
-    res.redirect(ig.get_authorization_url(config.redirectUrl, { scope: ['likes'] }));
-};
-
-var handleauth = function(req, res, config, ig) {
-    new ig.authorize_user(req.query.code, config.redirectUrl, function(err, result) {
-        if (err) {
-            res.render('profile', {
-                errorMsg: 'Uh-oh there was an error with instagram :('
-            });
-        } else {
-            var cookieOpts = {
-                maxAge: config.cookieAge,
-                httpOnly: true
-            };
-            res.cookie('igToken', result.access_token, cookieOpts);
-            res.cookie('igUserId', result.user.id, cookieOpts);
-            res.redirect('/profile');
-        }
-    });
-};
-
-// Shitty ass MFing work around https://github.com/totemstech/instagram-node/issues/23
-var getNewIgObject = function(config, igNodeObj) {
-    var ig = igNodeObj.instagram();
-    ig.use({
-        client_id: config.clientId,
-        client_secret: config.clientSecret
-    });
-    return ig;
-}, ig;
+var _          = require('lodash-node');
+var authFuncs  = require('./utils/auth-funcs');
+var crpytoFunc = require('./utils/crypto-func');
+var ig; // Shitty ass MFing work around https://github.com/totemstech/instagram-node/issues/23
 
 /*
 * Routez
@@ -52,17 +13,17 @@ module.exports = function(app, config, igNode) {
     });
 
     app.get('/authorize-user', function(req, res){
-        ig = getNewIgObject(config, igNode);
-        authorizeUser(req, res, config, ig);
+        ig = authFuncs.getNewIgObject(config, igNode);
+        authFuncs.authorizeUser(req, res, config, ig);
     });
 
     app.get('/handleauth', function(req, res){
-        handleauth(req, res, config, ig);
+        authFuncs.handleauth(req, res, config, ig);
     });
 
     app.get('/', function (req, res) {
         if (req.cookies.igToken) {
-            res.redirect('profile');
+            res.redirect('home');
         } else {
             res.render('index', {
                 notLoggedIn: true
@@ -70,27 +31,32 @@ module.exports = function(app, config, igNode) {
         }
     });
 
-    app.get('/profile', verifyAuthedUser, function (req, res, next) {
-        if (!ig) ig = getNewIgObject(config, igNode);
+    app.get('/logout', function (req, res) {
+        res.clearCookie('igToken');
+        res.clearCookie('igUserId');
+        res.redirect('/');
+    });
+
+    app.get('/home', authFuncs.verifyAuthedUser, function (req, res, next) {
+        if (!ig) ig = authFuncs.getNewIgObject(config, igNode);
         ig.use({ access_token: req.cookies.igToken });
-        ig.user(req.cookies.igUserId, function(err, result, remaining, limit) {
+        ig.user(crpytoFunc.decrypt(req.cookies.igUserId), function(err, result, remaining, limit) {
             var clientData = {};
             if (err) {
                 clientData.errorMsg = 'aw man, something went haywire :('
             } else {
                 clientData.userInfo = _.pick(
-                    result,
-                    'username',
-                    'bio',
-                    'profile_picture',
-                    'full_name',
-                    'id'
+                    result,'username','bio','profile_picture','full_name','id'
                 );
             }
             res.locals.clientData = clientData
             next();
         });
     }, function(req, res, next){
-        res.render('profile', res.locals.clientData);
+        res.render('home', res.locals.clientData);
+    });
+
+    app.get('*', function (req, res) {
+        res.status(404).render('404');
     });
 }

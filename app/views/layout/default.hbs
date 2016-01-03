@@ -7,8 +7,10 @@
     <header class="nav-head">
         <div class="inner">
             <a class="logo" href="/">Instalytics</a>
-            {{#if notLoggedIn }}
-                <a class="login btn" href="/authorize-user">Login</a>
+            {{#if notLoggedIn}}
+                <a class="log-in-out btn" href="/authorize-user">Login</a>
+            {{else}}
+                <a class="log-in-out btn" href="/logout">logout</a>
             {{/if}}
         </div>
     </header>
