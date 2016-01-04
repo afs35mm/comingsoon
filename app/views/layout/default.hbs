@@ -8,9 +8,9 @@
         <div class="inner">
             <a class="logo" href="/">Instalytics</a>
             {{#if notLoggedIn}}
-                <a class="log-in-out btn" href="/authorize-user">Login</a>
+                <a class="log-in btn" href="/authorize-user">Login</a>
             {{else}}
-                <a class="log-in-out btn" href="/logout">logout</a>
+                {{> loggedin-head }}
             {{/if}}
         </div>
     </header>

@@ -25,7 +25,7 @@ module.exports = function(app, config, igNode) {
     });
 
     app.get('/', function (req, res) {
-        if (req.cookies.igToken) {
+        if (req.session.igToken) {
             res.redirect('home');
         } else {
             res.render('index', {
@@ -35,14 +35,14 @@ module.exports = function(app, config, igNode) {
     });
 
     app.get('/logout', function (req, res) {
-        res.clearCookie('igToken');
-        res.clearCookie('igUserId');
+        req.session.igToken = null;
+        req.session.igUserId = null;
         res.redirect('/');
     });
 
     app.get('/home', authFuncs.verifyAuthedUser, function (req, res, next) {
         if (!ig) ig = authFuncs.getNewIgObject(config, igNode);
-        ig.use({ access_token: req.cookies.igToken });
+        ig.use({ access_token: req.session.igToken });
         ig.user(req.session.igUserId, function(err, result, remaining, limit) {
             var clientData = {};
             if (err) {

@@ -1,7 +1,5 @@
-var crpytoFunc = require('./crypto-func');
-
 exports.verifyAuthedUser = function(req, res, next) {
-    if (req.cookies.igToken) {
+    if (req.session.igToken) {
         next();
     } else {
         res.redirect('/');
@@ -19,11 +17,7 @@ exports.handleauth = function(req, res, config, ig) {
                 errorMsg: 'Uh-oh there was an error with instagram :('
             });
         } else {
-            var cookieOpts = {
-                maxAge: config.cookieAge,
-                httpOnly: true
-            };
-            res.cookie('igToken', result.access_token, cookieOpts);
+            req.session.igToken = result.access_token;
             req.session.igUserId = result.user.id;
             res.redirect('/home');
         }

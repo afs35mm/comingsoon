@@ -1,0 +1,66 @@
+$loggedin-head-height: 40px;
+
+.inner {
+    margin: 0 auto;
+    max-width: 980px;
+}
+
+.nav-head {
+    background: $color-black;
+    color: #fff;
+
+    .inner {
+        position: relative;
+    }
+
+    /**
+    * Logged in ish
+    **/
+    .loggedin-head {
+        right: 0;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+
+        .full-name {
+            display: inline-block;
+            line-height: $loggedin-head-height;
+            vertical-align: top;
+        }
+
+        .down-arrow {
+            line-height: $loggedin-head-height;
+            margin-left: 8px;
+            vertical-align: top;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .profile-pic {
+            width: $loggedin-head-height;
+            height: $loggedin-head-height;
+            display: inline-block;
+            border-radius: $border-radius;
+            margin-left: 15px;
+        }
+    }
+
+    /**
+    * Logged out
+    **/
+    .log-in {
+        right: 0;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .logo {
+        width: 102px;
+        height: 65px;
+        display: inline-block;
+        text-indent: -9999px;
+        background-color: $color-blue;
+        //background-image: url("/img/instalytics-logo.png");
+    }
+}

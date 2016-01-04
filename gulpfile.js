@@ -13,7 +13,7 @@ gulp.task('build-css', function() {
 });
 
 
-gulp.task('watch', function() {
+gulp.task('watch', ['build-css'], function() {
     //gulp.watch(input.javascript, ['jshint', 'build-js']);
     gulp.watch('app/client/sass/**/*.scss', ['build-css']);
 });
